@@ -7,3 +7,4 @@ Modelo de Colaboração: Sincronização rigorosa através de Pull Requests, bra
 Agradecimentos Pedagógicos: Reconhecimento à Formadora Sara Monteiro pelo acompanhamento técnico na UC00617.
 Controlo de Qualidade: Textos e descrições validados em conformidade com as normas ortográficas (PT-PT).
 Registo de Versões: Versão 1.0 dos dados da equipa estabilizada e pronta para integração.
+[Estado da Equipa: Documentação de Membros Concluída e Pronta para Submissão Final]
