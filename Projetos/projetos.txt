@@ -1,2 +1,3 @@
 === PORTIFÓLIO DE PROJETOS - TECH SJM 2026 ===
 Ação de Formação: Técnico Especialista em Tecnologias e Programação de Sistemas de Informação
+Unidade Curricular: UC00617 - Utilizar serviços Git e GitHub | Formadora: Sara Monteiro
