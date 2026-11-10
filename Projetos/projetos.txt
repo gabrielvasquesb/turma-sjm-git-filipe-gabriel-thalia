@@ -1,0 +1,10 @@
+=== PORTIFÓLIO DE PROJETOS - TECH SJM 2026 ===
+Ação de Formação: Técnico Especialista em Tecnologias e Programação de Sistemas de Informação
+Unidade Curricular: UC00617 - Utilizar serviços Git e GitHub | Formadora: Sara Monteiro
+Objetivo Institucional: Desenvolver o website profissional cola
+Stack Tecnológico: HTML5, CSS3, Sistema de Controlo de Versões Git, GitHub e GitHub Pages
+[Projeto 01]: Website Institucional e Portfólio da Turma Tech SJM
+[Projeto 02]: Sistema de Controlo de Versões Colaborativo com Implementação de Pull Requests e Code Reviews Técnicos
+Workflow e Metodologia: Utilização de repositórios públicos descentralizados, branch protection e validação por Pull Requests.
+Instruções de Execução: Clonar o repositório principal via git clone e abrir a estrutura em ambiente de desenvolvimento local.
+[Estado do Módulo: Documentação de Projetos Concluída, Validada e Pronta para Integração]
