@@ -6,3 +6,4 @@ Stack Tecnológico: HTML5, CSS3, Sistema de Controlo de Versões Git, GitHub e G
 [Projeto 01]: Website Institucional e Portfólio da Turma Tech SJM
 [Projeto 02]: Sistema de Controlo de Versões Colaborativo com Implementação de Pull Requests e Code Reviews Técnicos
 Workflow e Metodologia: Utilização de repositórios públicos descentralizados, branch protection e validação por Pull Requests.
+Instruções de Execução: Clonar o repositório principal via git clone e abrir a estrutura em ambiente de desenvolvimento local.
