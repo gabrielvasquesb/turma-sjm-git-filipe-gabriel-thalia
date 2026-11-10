@@ -1,2 +1,4 @@
 === EQUIPA DE DESENVOLVIMENTO - TECH SJM 2026 ===
 Dinâmica de Grupo: Equipa colaborativa focada na aplicação prática de metodologias ágeis e controlo de versões.
+Membro 01: Aluno 1 - Repo Owner (Responsável pelo index.txt, configuração do repositório e GitHub Pages)
+Membro 02: Aluno 2 - Gestor de Projetos e Conteúdos (Responsável pelos ficheiros projetos.txt e equipa.txt)
