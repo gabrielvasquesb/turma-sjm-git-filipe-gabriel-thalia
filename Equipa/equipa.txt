@@ -5,3 +5,4 @@ Membro 02: Aluno 2 - Gestor de Projetos e Conteúdos (Responsável pelos ficheir
 Membro 03: Aluno 3 - Responsável de Documentação (Responsável pelos ficheiros contactos.txt e disciplinas.txt)
 Modelo de Colaboração: Sincronização rigorosa através de Pull Requests, branches dedicadas e validação mútua.
 Agradecimentos Pedagógicos: Reconhecimento à Formadora Sara Monteiro pelo acompanhamento técnico na UC00617.
+Controlo de Qualidade: Textos e descrições validados em conformidade com as normas ortográficas (PT-PT).
