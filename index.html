@@ -37,3 +37,3267 @@ commit 19
 commit 20
 
 commit 21
+
+____________________________________________________________________________
+
+<!DOCTYPE html>
+<!--
+  TRIO ARCADE — Gabriel, Filipe e Thalia
+
+  Copia TODO este ficheiro para o teu index.html.
+
+  Estrutura necessária:
+  index.html
+  avatars/filipe.png
+  avatars/gabriel.png
+  avatars/thalia.png
+
+  CSS: bloco <style>.
+  Conteúdo e lógica: bloco <script> no fim.
+-->
+<html lang="pt-PT">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#111019">
+  <meta
+    name="description"
+    content="Três personagens, histórias reais e um desafio arcade. Conhece Filipe, Gabriel e Thalia e descobre quem é quem."
+  >
+
+  <title>Trio Arcade · Quem é quem?</title>
+
+  <style>
+    /* ============================================================
+       1. DESIGN SYSTEM
+       Cores, tipografia e estilos partilhados.
+       ============================================================ */
+
+    :root {
+      color-scheme: dark;
+      --bg: #111019;
+      --panel: #1b1927;
+      --panel2: #242133;
+      --line: #413b56;
+      --text: #faf7ed;
+      --muted: #b4adc6;
+      --lime: #dcff7b;
+      --purple: #b79aff;
+      --pink: #ff91bf;
+      --cyan: #82e7ed;
+      --red: #ff9b9b;
+      --radius: 3px;
+      --mono: "Courier New", Courier, monospace;
+      --body: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font: 16px/1.6 var(--body);
+      min-width: 280px;
+    }
+
+    /* Efeito suave de linhas de televisão antiga. */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 20;
+      background: repeating-linear-gradient(
+        transparent 0 3px,
+        #00000018 3px 4px
+      );
+      opacity: .45;
+    }
+
+    button,
+    a,
+    input {
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    button,
+    a {
+      touch-action: manipulation;
+    }
+
+    button {
+      font: inherit;
+      cursor: pointer;
+      color: inherit;
+      border-radius: var(--radius);
+    }
+
+    a {
+      color: inherit;
+    }
+
+    button:disabled {
+      cursor: default;
+    }
+
+    button:focus-visible,
+    a:focus-visible,
+    [tabindex]:focus-visible {
+      outline: 3px solid var(--cyan);
+      outline-offset: 5px;
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin: 0;
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
+    }
+
+    svg {
+      display: block;
+      flex: none;
+    }
+
+    [hidden] {
+      display: none !important;
+    }
+
+    .container {
+      width: min(1160px, calc(100% - 48px));
+      margin: auto;
+    }
+
+    .mono {
+      font-family: var(--mono);
+      font-weight: 700;
+    }
+
+    .eyebrow {
+      font: 700 12px/1.6 var(--mono);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    .skip {
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      z-index: 100;
+      background: var(--lime);
+      color: var(--bg);
+      padding: 12px;
+      transform: translateY(-180%);
+    }
+
+    .skip:focus {
+      transform: none;
+    }
+
+    /* ============================================================
+       2. NAVEGAÇÃO E COMPONENTES REUTILIZÁVEIS
+       ============================================================ */
+
+    .topbar {
+      border-bottom: 1px solid var(--line);
+      background: #111019ee;
+    }
+
+    .header {
+      min-height: 88px;
+      display: flex;
+      gap: 24px;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      font: 900 19px/1 var(--mono);
+      letter-spacing: -1px;
+    }
+
+    .brand-mark {
+      width: 34px;
+      height: 34px;
+      color: var(--lime);
+    }
+
+    .brand span span {
+      color: var(--lime);
+    }
+
+    nav {
+      display: flex;
+      gap: 5px;
+    }
+
+    nav a {
+      text-decoration: none;
+      font: 700 12px var(--mono);
+      padding: 12px;
+      color: var(--muted);
+      border-bottom: 2px solid transparent;
+    }
+
+    nav a:hover {
+      color: var(--text);
+    }
+
+    nav a[aria-current="page"] {
+      color: var(--lime);
+      border-color: var(--lime);
+    }
+
+    .settings {
+      display: flex;
+      gap: 8px;
+    }
+
+    .setting {
+      background: transparent;
+      border: 1px solid var(--line);
+      padding: 9px 10px;
+      min-height: 40px;
+      color: var(--muted);
+      font: 700 10px var(--mono);
+    }
+
+    .setting[aria-pressed="true"] {
+      color: var(--lime);
+      border-color: #75834c;
+    }
+
+    .btn {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
+      min-height: 52px;
+      padding: 15px 23px;
+      font: 900 12px/1.5 var(--mono);
+      letter-spacing: 1px;
+      text-decoration: none;
+      border: 2px solid var(--lime);
+      background: var(--lime);
+      color: #171a10;
+      box-shadow: 4px 4px 0 #73853d;
+      transition: transform .14s, box-shadow .14s;
+    }
+
+    .btn:hover {
+      transform: translate(-1px, -2px);
+      box-shadow: 5px 6px 0 #73853d;
+    }
+
+    .btn:active {
+      transform: translate(3px, 3px);
+      box-shadow: 1px 1px 0 #73853d;
+    }
+
+    .btn.secondary {
+      background: transparent;
+      color: var(--text);
+      border-color: var(--line);
+      box-shadow: 4px 4px 0 #08070e;
+    }
+
+    .btn.small {
+      padding: 11px 15px;
+      min-height: 44px;
+      font-size: 11px;
+    }
+
+    .btn:disabled {
+      opacity: .5;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .pixel-arrow {
+      font-size: 18px;
+    }
+
+    .pill {
+      border: 1px solid var(--line);
+      padding: 4px 9px;
+      color: var(--muted);
+      font: 700 10px/1.5 var(--mono);
+      text-transform: uppercase;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      border: 1px solid #59603a;
+      background: #dcff7b09;
+      color: var(--lime);
+      padding: 6px 10px;
+      font: 700 10px/1.5 var(--mono);
+      letter-spacing: 1px;
+    }
+
+    .dot {
+      width: 6px;
+      height: 6px;
+      background: var(--lime);
+      box-shadow: 0 0 8px #dcff7b55;
+    }
+
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 20px;
+      margin-bottom: 24px;
+    }
+
+    .section-head h2 {
+      font: 900 23px/1.3 var(--mono);
+      letter-spacing: -1px;
+    }
+
+    .section-head p {
+      font: 12px var(--mono);
+      color: var(--muted);
+    }
+
+    .section-number {
+      color: var(--purple);
+      margin-right: 12px;
+    }
+
+    .actions {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 20px;
+      align-items: center;
+    }
+
+    .text-button {
+      background: transparent;
+      border: 0;
+      color: var(--muted);
+      font: 700 12px var(--mono);
+      padding: 13px;
+      text-decoration: underline;
+      text-underline-offset: 5px;
+    }
+
+    /* ============================================================
+       3. ECRÃ INICIAL E CARTÕES DOS PERSONAGENS
+       ============================================================ */
+
+    main {
+      min-height: calc(100vh - 180px);
+    }
+
+    .hero {
+      padding: 54px 0 40px;
+      text-align: center;
+      position: relative;
+    }
+
+    .hero::before,
+    .hero::after {
+      content: "+";
+      position: absolute;
+      font: 32px var(--mono);
+      color: #64567e;
+      top: 92px;
+      left: 3%;
+    }
+
+    .hero::after {
+      left: auto;
+      right: 3%;
+      top: 172px;
+      color: #b09851;
+    }
+
+    .hero h1 {
+      font: 900 clamp(36px, 5.8vw, 69px)/1.08 var(--mono);
+      letter-spacing: -3px;
+      margin: 22px auto 18px;
+      text-shadow: 3px 3px 0 #423454;
+    }
+
+    .hero h1 span {
+      display: block;
+      color: var(--lime);
+      text-shadow: 3px 3px 0 #4d5937;
+    }
+
+    .hero p {
+      max-width: 520px;
+      margin: 0 auto;
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    .hero .badge {
+      margin-bottom: 0;
+    }
+
+    .roster {
+      padding-bottom: 42px;
+    }
+
+    .roster-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 22px;
+    }
+
+    .character {
+      position: relative;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      padding: 0;
+      text-align: left;
+      width: 100%;
+      overflow: hidden;
+      transition: transform .18s, border-color .18s;
+      isolation: isolate;
+    }
+
+    .character:hover {
+      transform: translateY(-5px);
+      border-color: var(--accent);
+    }
+
+    .character .card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 17px 20px 0;
+      font: 700 11px var(--mono);
+      color: var(--accent);
+      position: relative;
+      z-index: 2;
+    }
+
+    .character .card-top span:last-child {
+      font-size: 9px;
+      color: var(--muted);
+      letter-spacing: 1px;
+    }
+
+    .portrait-stage {
+      height: 224px;
+      position: relative;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      overflow: hidden;
+      margin-top: 6px;
+      background: linear-gradient(transparent, var(--tint));
+    }
+
+    .portrait-stage::before {
+      content: "";
+      position: absolute;
+      inset: 26px 45px -40px;
+      border: 1px solid var(--accent);
+      opacity: .22;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent 0 28px,
+        var(--accent) 28px 29px
+      );
+      transform: skewY(-8deg);
+    }
+
+    .portrait-stage::after {
+      content: "";
+      position: absolute;
+      width: 74px;
+      height: 74px;
+      border: 1px solid var(--accent);
+      top: 40px;
+      right: 25px;
+      opacity: .25;
+      box-shadow:
+        10px -10px 0 -1px var(--panel),
+        10px -10px 0 0 var(--accent);
+    }
+
+    .portrait-stage img {
+      height: 100%;
+      width: 100%;
+      object-fit: contain;
+      object-position: bottom;
+      position: relative;
+      z-index: 1;
+      image-rendering: pixelated;
+      filter: drop-shadow(0 4px 0 #0b091b);
+      transition: transform .2s;
+    }
+
+    .character:hover img {
+      transform: scale(1.035);
+    }
+
+    .card-info {
+      padding: 18px 20px 20px;
+      border-top: 1px solid var(--line);
+      position: relative;
+      background: var(--panel);
+    }
+
+    .card-name {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font: 900 24px var(--mono);
+      letter-spacing: -1px;
+    }
+
+    .card-name span:last-child {
+      color: var(--accent);
+      font-size: 20px;
+    }
+
+    .card-class {
+      font: 700 10px var(--mono);
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin: 7px 0 15px;
+    }
+
+    .tag-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .card-info .pill {
+      font-size: 9px;
+    }
+
+    .fallback {
+      height: 100%;
+      display: grid;
+      place-content: center;
+      text-align: center;
+      font: 900 42px var(--mono);
+      color: var(--accent);
+      position: relative;
+      z-index: 1;
+    }
+
+    .fallback small {
+      display: block;
+      font-size: 11px;
+      max-width: 180px;
+      margin-top: 14px;
+      line-height: 1.5;
+    }
+
+    .launch {
+      padding: 27px 25px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 28px;
+      margin-top: 25px;
+    }
+
+    .launch-title {
+      font: 900 16px var(--mono);
+      margin-bottom: 7px;
+    }
+
+    .launch p {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .launch-side {
+      display: flex;
+      align-items: center;
+      gap: 27px;
+      flex: none;
+    }
+
+    .best {
+      text-align: center;
+      font: 700 10px var(--mono);
+      color: var(--muted);
+    }
+
+    .best strong {
+      display: block;
+      color: var(--lime);
+      font-size: 22px;
+      letter-spacing: 2px;
+      margin-top: 7px;
+    }
+
+    .mini-strip {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 22px;
+      padding: 22px 0 0;
+      font: 700 10px var(--mono);
+      color: var(--muted);
+    }
+
+    .mini-strip span::before {
+      content: "◆";
+      color: var(--purple);
+      margin-right: 8px;
+    }
+
+    .page-heading {
+      padding: 42px 0 30px;
+    }
+
+    .page-heading h1 {
+      font: 900 clamp(28px, 4vw, 42px)/1.15 var(--mono);
+      letter-spacing: -1.5px;
+      margin: 10px 0 13px;
+    }
+
+    .page-heading p {
+      color: var(--muted);
+      max-width: 670px;
+    }
+
+    .team-note {
+      padding: 24px 0 38px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    /* ============================================================
+       4. QUIZ, FEEDBACK E RESULTADOS
+       ============================================================ */
+
+    .game-shell {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 38px 0 54px;
+    }
+
+    .game-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      margin-bottom: 23px;
+    }
+
+    .game-top .eyebrow {
+      color: var(--purple);
+    }
+
+    .stats {
+      display: flex;
+      gap: 30px;
+    }
+
+    .stat {
+      font: 700 10px var(--mono);
+      color: var(--muted);
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 21px;
+      color: var(--text);
+      margin-top: 6px;
+    }
+
+    .stat:first-child strong {
+      color: var(--lime);
+    }
+
+    .progress-label {
+      display: flex;
+      justify-content: space-between;
+      font: 700 10px var(--mono);
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+
+    progress {
+      width: 100%;
+      height: 8px;
+      border: 0;
+      display: block;
+      background: var(--panel2);
+      appearance: none;
+    }
+
+    progress::-webkit-progress-bar {
+      background: var(--panel2);
+    }
+
+    progress::-webkit-progress-value {
+      background: var(--purple);
+    }
+
+    progress::-moz-progress-bar {
+      background: var(--purple);
+    }
+
+    .question-panel {
+      padding: 35px 34px;
+      margin: 25px 0 21px;
+      border: 1px solid var(--line);
+      background: var(--panel);
+      position: relative;
+    }
+
+    .question-panel .eyebrow {
+      color: var(--lime);
+      font-size: 10px;
+    }
+
+    .question-panel h1 {
+      font: 700 clamp(22px, 3.5vw, 31px)/1.4 var(--mono);
+      letter-spacing: -.8px;
+      margin: 15px 0 12px;
+    }
+
+    .question-panel p {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .answer-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .answer {
+      padding: 0;
+      background: var(--panel);
+      border: 2px solid var(--line);
+      text-align: left;
+      transition: border-color .15s, transform .15s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .answer:not(:disabled):hover {
+      border-color: var(--accent);
+      transform: translateY(-3px);
+    }
+
+    .answer-portrait {
+      height: 150px;
+      background: linear-gradient(transparent, var(--tint));
+      display: flex;
+      justify-content: center;
+      align-items: end;
+    }
+
+    .answer img {
+      height: 100%;
+      width: 100%;
+      object-fit: contain;
+      object-position: bottom;
+      image-rendering: pixelated;
+    }
+
+    .answer-label {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px;
+      font: 900 15px var(--mono);
+      border-top: 1px solid var(--line);
+    }
+
+    kbd {
+      font: 700 11px var(--mono);
+      border: 1px solid var(--line);
+      padding: 3px 6px;
+      color: var(--muted);
+      background: var(--bg);
+      box-shadow: 0 2px 0 var(--line);
+    }
+
+    .answer.correct {
+      border-color: var(--lime);
+      background: #dcff7b13;
+    }
+
+    .answer.wrong {
+      border-color: var(--red);
+      background: #ff9b9b0c;
+    }
+
+    .answer.correct .answer-label::after {
+      content: "✓";
+      color: var(--lime);
+    }
+
+    .answer.wrong .answer-label::after {
+      content: "×";
+      color: var(--red);
+    }
+
+    .answer.correct kbd,
+    .answer.wrong kbd {
+      display: none;
+    }
+
+    .answer.faded {
+      opacity: .55;
+    }
+
+    .feedback {
+      margin-top: 22px;
+      padding: 20px 23px;
+      border-left: 3px solid var(--lime);
+      background: #dcff7b0b;
+    }
+
+    .feedback.miss {
+      border-color: var(--red);
+      background: #ff9b9b09;
+    }
+
+    .feedback h2 {
+      font: 900 17px/1.5 var(--mono);
+      color: var(--lime);
+      margin-bottom: 7px;
+    }
+
+    .feedback.miss h2 {
+      color: var(--red);
+    }
+
+    .feedback p {
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    .next-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      margin-top: 22px;
+    }
+
+    .next-row p {
+      font: 11px/1.7 var(--mono);
+      color: var(--muted);
+    }
+
+    .lobby,
+    .results {
+      text-align: center;
+      padding: 46px 28px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      margin: 18px 0;
+    }
+
+    .lobby-icon {
+      font: 900 58px var(--mono);
+      color: var(--lime);
+      text-shadow: 4px 4px 0 #536332;
+    }
+
+    .lobby h1,
+    .results h1 {
+      font: 900 clamp(27px, 4vw, 42px)/1.2 var(--mono);
+      letter-spacing: -1px;
+      margin: 17px 0;
+    }
+
+    .lobby > p,
+    .results > p {
+      max-width: 560px;
+      margin: 0 auto 24px;
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    .lobby .actions {
+      margin-top: 30px;
+    }
+
+    .result-score {
+      font: 900 clamp(55px, 9vw, 90px)/1 var(--mono);
+      color: var(--lime);
+      text-shadow: 4px 4px 0 #536332;
+      margin: 26px 0 8px;
+    }
+
+    .result-score small {
+      font-size: 16px;
+      text-shadow: none;
+    }
+
+    .result-title {
+      font: 700 13px var(--mono);
+      color: var(--purple);
+      margin: 15px 0 27px;
+    }
+
+    .result-stats {
+      display: flex;
+      justify-content: center;
+      gap: 36px;
+      margin: 25px 0 30px;
+    }
+
+    .result-stats strong {
+      display: block;
+      font: 900 23px var(--mono);
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+
+    .result-stats span {
+      font: 700 10px var(--mono);
+      color: var(--muted);
+    }
+
+    .result-review {
+      margin-top: 25px;
+      border: 1px solid var(--line);
+      background: var(--panel);
+    }
+
+    .result-review summary {
+      cursor: pointer;
+      padding: 18px 22px;
+      font: 700 13px var(--mono);
+    }
+
+    .review-list {
+      padding: 0 22px 10px;
+      list-style: none;
+      margin: 0;
+    }
+
+    .review-list li {
+      padding: 17px 0;
+      border-top: 1px solid var(--line);
+      font-size: 13px;
+    }
+
+    .review-list strong {
+      display: block;
+      font: 700 13px/1.6 var(--mono);
+      margin-bottom: 6px;
+    }
+
+    .review-list p {
+      color: var(--muted);
+    }
+
+    .review-mark {
+      color: var(--lime);
+      margin-right: 8px;
+    }
+
+    .review-mark.miss {
+      color: var(--red);
+    }
+
+    .pixel-burst {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 50;
+      overflow: hidden;
+    }
+
+    .pixel-burst i {
+      position: absolute;
+      left: 50%;
+      top: 47%;
+      width: 9px;
+      height: 9px;
+      background: var(--lime);
+      animation: burst .8s ease-out both;
+      transform: translate(0, 0);
+    }
+
+    @keyframes burst {
+      to {
+        transform: translate(var(--x), var(--y)) rotate(var(--r));
+        opacity: 0;
+      }
+    }
+
+    /* ============================================================
+       5. MANUAL, FICHAS DOS PERFIS E NOTIFICAÇÕES
+       ============================================================ */
+
+    .manual-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin-bottom: 24px;
+    }
+
+    .manual-card {
+      border: 1px solid var(--line);
+      background: var(--panel);
+      padding: 25px;
+    }
+
+    .manual-card .step {
+      color: var(--purple);
+      font: 900 26px var(--mono);
+    }
+
+    .manual-card h2 {
+      font: 900 18px var(--mono);
+      margin: 18px 0 12px;
+    }
+
+    .manual-card p {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .rules {
+      padding: 26px;
+      border: 1px solid var(--line);
+      margin-bottom: 32px;
+    }
+
+    .rules h2 {
+      font: 900 19px var(--mono);
+      margin-bottom: 15px;
+    }
+
+    .rules ul {
+      padding-left: 20px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.9;
+    }
+
+    .rules strong {
+      color: var(--text);
+    }
+
+    .manual-actions {
+      padding-bottom: 46px;
+    }
+
+    dialog {
+      width: min(790px, calc(100% - 32px));
+      max-height: calc(100dvh - 40px);
+      padding: 0;
+      border: 1px solid var(--line);
+      background: var(--panel);
+      color: var(--text);
+      box-shadow: 8px 8px 0 #0006;
+    }
+
+    dialog::backdrop {
+      background: #08060ee8;
+      backdrop-filter: blur(5px);
+    }
+
+    .profile {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      position: relative;
+    }
+
+    .profile-art {
+      background: linear-gradient(155deg, var(--tint), #14111f);
+      display: flex;
+      align-items: end;
+      min-height: 380px;
+      padding-top: 45px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .profile-art::before {
+      content: "PLAYER FILE";
+      position: absolute;
+      top: 25px;
+      left: 20px;
+      font: 700 10px var(--mono);
+      letter-spacing: 2px;
+      color: var(--accent);
+    }
+
+    .profile-art img {
+      width: 100%;
+      height: auto;
+      image-rendering: pixelated;
+    }
+
+    .profile-copy {
+      padding: 38px 28px 28px;
+      min-width: 0;
+    }
+
+    .close-dialog {
+      position: absolute;
+      right: 11px;
+      top: 10px;
+      background: var(--bg);
+      border: 1px solid var(--line);
+      height: 34px;
+      width: 34px;
+      z-index: 3;
+      font-size: 22px;
+      line-height: 1;
+    }
+
+    .profile h2 {
+      font: 900 32px var(--mono);
+      letter-spacing: -1px;
+    }
+
+    .profile .card-class {
+      margin: 8px 0 23px;
+    }
+
+    .profile-tabs {
+      display: flex;
+      gap: 15px;
+      border-bottom: 1px solid var(--line);
+      margin-bottom: 20px;
+    }
+
+    .profile-tabs button {
+      border: 0;
+      border-bottom: 2px solid transparent;
+      border-radius: 0;
+      background: transparent;
+      font: 700 11px var(--mono);
+      padding: 10px 0;
+      color: var(--muted);
+    }
+
+    .profile-tabs button[aria-selected="true"] {
+      color: var(--accent);
+      border-bottom-color: var(--accent);
+    }
+
+    .profile [role="tabpanel"] {
+      font-size: 14px;
+      color: var(--muted);
+      min-height: 140px;
+    }
+
+    .profile [role="tabpanel"] p + p {
+      margin-top: 13px;
+    }
+
+    .profile [role="tabpanel"] ul {
+      margin: 0;
+      padding-left: 19px;
+      line-height: 1.9;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 25px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 100;
+      max-width: calc(100% - 32px);
+      padding: 14px 20px;
+      background: var(--lime);
+      color: #171a10;
+      border: 2px solid #768547;
+      font: 700 12px/1.6 var(--mono);
+      box-shadow: 4px 4px 0 #0007;
+    }
+
+    .footer {
+      border-top: 1px solid var(--line);
+      padding: 22px 0;
+      margin-top: 6px;
+    }
+
+    .footer-inner {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+      color: var(--muted);
+      font: 700 10px/1.7 var(--mono);
+      letter-spacing: .5px;
+    }
+
+    .footer .credit {
+      color: var(--purple);
+    }
+
+    .bottom-space {
+      padding-bottom: 35px;
+    }
+
+    /* ============================================================
+       6. RESPONSIVIDADE
+       ============================================================ */
+
+    @media (min-width: 1500px) {
+      .hero {
+        padding-top: 64px;
+      }
+
+      .portrait-stage {
+        height: 260px;
+      }
+    }
+
+    @media (max-width: 900px) {
+      .header {
+        gap: 14px;
+        padding-top: 17px;
+        padding-bottom: 14px;
+      }
+
+      .brand {
+        font-size: 17px;
+      }
+
+      .settings {
+        margin-left: auto;
+      }
+
+      nav {
+        order: 3;
+        width: 100%;
+        justify-content: center;
+        border-top: 1px solid #413b5666;
+        padding-top: 5px;
+      }
+
+      nav a {
+        flex: 1;
+        text-align: center;
+      }
+
+      .hero {
+        padding-top: 35px;
+      }
+
+      .hero h1 {
+        letter-spacing: -2px;
+      }
+
+      .portrait-stage {
+        height: 185px;
+      }
+
+      .card-info {
+        padding: 15px;
+      }
+
+      .card-top {
+        padding-left: 15px !important;
+        padding-right: 15px !important;
+      }
+
+      .roster-grid {
+        gap: 14px;
+      }
+
+      .launch {
+        gap: 20px;
+      }
+
+      .launch-side {
+        gap: 18px;
+      }
+
+      .best {
+        display: none;
+      }
+
+      .manual-grid {
+        gap: 12px;
+      }
+
+      .manual-card {
+        padding: 20px;
+      }
+
+      .hero::before,
+      .hero::after {
+        display: none;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        width: calc(100% - 28px);
+      }
+
+      .header {
+        gap: 8px;
+      }
+
+      .brand {
+        font-size: 16px;
+        gap: 7px;
+      }
+
+      .brand-mark {
+        width: 29px;
+        height: 29px;
+      }
+
+      .setting {
+        padding: 8px 7px;
+        font-size: 9px;
+      }
+
+      .settings {
+        gap: 5px;
+      }
+
+      nav a {
+        padding: 12px 4px;
+        font-size: 10px;
+      }
+
+      .hero {
+        padding: 30px 0;
+      }
+
+      .hero h1 {
+        font-size: clamp(29px, 7.8vw, 44px);
+        letter-spacing: -1.5px;
+        margin: 20px 0 15px;
+      }
+
+      .hero p {
+        font-size: 13px;
+        max-width: 340px;
+      }
+
+      .hero .badge {
+        font-size: 9px;
+      }
+
+      .section-head {
+        margin-bottom: 17px;
+        align-items: center;
+      }
+
+      .section-head h2 {
+        font-size: 17px;
+        letter-spacing: -.7px;
+      }
+
+      .section-head p {
+        font-size: 9px;
+        max-width: 100px;
+        text-align: right;
+        line-height: 1.6;
+      }
+
+      .section-number {
+        margin-right: 6px;
+      }
+
+      .roster-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+      }
+
+      .character {
+        display: grid;
+        grid-template-columns: 114px 1fr;
+        align-items: stretch;
+        min-height: 150px;
+      }
+
+      .character .card-top {
+        position: absolute;
+        left: 0;
+        top: 0;
+        padding: 9px !important;
+        font-size: 8px;
+      }
+
+      .character .card-top span:last-child {
+        display: none;
+      }
+
+      .portrait-stage {
+        height: 155px;
+        width: 114px;
+        margin: 0;
+        padding-top: 20px;
+      }
+
+      .portrait-stage::before {
+        inset: 15px 15px -30px;
+      }
+
+      .portrait-stage::after {
+        display: none;
+      }
+
+      .card-info {
+        border-top: 0;
+        border-left: 1px solid var(--line);
+        padding: 23px 17px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+
+      .card-name {
+        font-size: 23px;
+      }
+
+      .card-class {
+        font-size: 9px;
+        margin: 7px 0 13px;
+      }
+
+      .card-info .pill {
+        font-size: 8px;
+        padding: 4px 6px;
+      }
+
+      .launch {
+        flex-direction: column;
+        text-align: center;
+        padding: 24px 17px;
+        margin-top: 20px;
+      }
+
+      .launch-title {
+        font-size: 15px;
+      }
+
+      .launch p {
+        font-size: 12px;
+      }
+
+      .launch-side,
+      .launch .btn {
+        width: 100%;
+      }
+
+      .launch .btn {
+        font-size: 11px;
+      }
+
+      .mini-strip {
+        gap: 10px 16px;
+        font-size: 9px;
+      }
+
+      .roster {
+        padding-bottom: 28px;
+      }
+
+      .game-shell {
+        padding-top: 27px;
+      }
+
+      .game-top {
+        gap: 10px;
+        align-items: start;
+      }
+
+      .game-top .eyebrow {
+        font-size: 9px;
+        letter-spacing: 1px;
+        max-width: 100px;
+      }
+
+      .stats {
+        gap: 18px;
+      }
+
+      .stat {
+        font-size: 9px;
+      }
+
+      .stat strong {
+        font-size: 18px;
+      }
+
+      .question-panel {
+        padding: 23px 20px;
+        margin-top: 20px;
+      }
+
+      .question-panel h1 {
+        font-size: 21px;
+        line-height: 1.4;
+      }
+
+      .answer-grid {
+        gap: 8px;
+      }
+
+      .answer-portrait {
+        height: 105px;
+      }
+
+      .answer-label {
+        padding: 10px 5px;
+        font-size: 11px;
+        justify-content: center;
+        gap: 5px;
+      }
+
+      .answer-label kbd {
+        display: none;
+      }
+
+      .feedback {
+        padding: 17px;
+      }
+
+      .feedback h2 {
+        font-size: 15px;
+      }
+
+      .feedback p {
+        font-size: 13px;
+      }
+
+      .next-row {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .next-row p {
+        text-align: center;
+        font-size: 10px;
+      }
+
+      .manual-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .manual-card {
+        padding: 23px;
+      }
+
+      .manual-card .step {
+        font-size: 20px;
+      }
+
+      .manual-card h2 {
+        margin: 10px 0;
+      }
+
+      .page-heading {
+        padding-top: 28px;
+      }
+
+      .page-heading p {
+        font-size: 14px;
+      }
+
+      .profile {
+        grid-template-columns: 1fr;
+      }
+
+      .profile-art {
+        min-height: 0;
+        height: 170px;
+        justify-content: center;
+        padding-top: 13px;
+      }
+
+      .profile-art img {
+        height: 100%;
+        width: auto;
+      }
+
+      .profile-art::before {
+        font-size: 8px;
+        left: 15px;
+        top: 18px;
+        max-width: 60px;
+        line-height: 1.8;
+      }
+
+      .profile-copy {
+        padding: 23px;
+      }
+
+      .profile h2 {
+        font-size: 28px;
+      }
+
+      .profile [role="tabpanel"] {
+        min-height: 110px;
+      }
+
+      .profile-tabs {
+        gap: 22px;
+      }
+
+      .profile-tabs button {
+        min-height: 44px;
+      }
+
+      .lobby,
+      .results {
+        padding: 34px 18px;
+      }
+
+      .result-stats {
+        gap: 22px;
+      }
+
+      .result-stats strong {
+        font-size: 20px;
+      }
+
+      .result-stats span {
+        font-size: 9px;
+      }
+
+      .result-review summary {
+        font-size: 12px;
+      }
+
+      .footer-inner {
+        justify-content: center;
+        text-align: center;
+        font-size: 9px;
+      }
+
+      .footer-inner > span {
+        width: 100%;
+      }
+
+      .actions {
+        gap: 17px;
+      }
+
+      .actions .btn {
+        width: 100%;
+      }
+
+      .fallback {
+        font-size: 26px;
+      }
+
+      .fallback small {
+        font-size: 8px;
+        padding: 8px;
+      }
+    }
+
+    /* Respeita as preferências de acessibilidade do visitante. */
+    body.reduce-motion::before {
+      display: none;
+    }
+
+    body.reduce-motion *,
+    body.reduce-motion *::before,
+    body.reduce-motion *::after {
+      animation: none !important;
+      transition: none !important;
+      scroll-behavior: auto !important;
+    }
+
+    body.reduce-motion .character:hover,
+    body.reduce-motion .character:hover img,
+    body.reduce-motion .btn:hover,
+    body.reduce-motion .answer:hover {
+      transform: none;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+
+      *,
+      *::before,
+      *::after {
+        animation: none !important;
+        transition: none !important;
+        scroll-behavior: auto !important;
+      }
+
+      body::before {
+        display: none;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <a class="skip" href="#main">Saltar para o conteúdo</a>
+
+  <!-- CABEÇALHO -->
+  <header class="topbar">
+    <div class="container header">
+      <a class="brand" href="#inicio" aria-label="Trio Arcade — início">
+        <svg
+          class="brand-mark"
+          viewBox="0 0 32 32"
+          fill="currentColor"
+          aria-hidden="true"
+        >
+          <path d="M8 4h16v4h4v4h4v12h-4v4h-8v-4h-8v4H4v-4H0V12h4V8h4zm0 8v4H4v4h4v4h4v-4h4v-4h-4v-4zm16 0v4h4v-4zm-4 8h4v-4h-4z"/>
+        </svg>
+
+        <span>TRIO<span>//</span>ARCADE</span>
+      </a>
+
+      <nav aria-label="Navegação principal">
+        <a href="#inicio" data-route="inicio" aria-current="page">
+          INÍCIO
+        </a>
+        <a href="#jogar" data-route="jogar">
+          JOGAR
+        </a>
+        <a href="#equipa" data-route="equipa">
+          A EQUIPA
+        </a>
+        <a href="#manual" data-route="manual">
+          COMO JOGAR
+        </a>
+      </nav>
+
+      <div class="settings">
+        <button
+          class="setting"
+          id="sound-toggle"
+          aria-pressed="false"
+          aria-label="Sons do jogo"
+        >
+          ♪ SOM OFF
+        </button>
+
+        <button
+          class="setting"
+          id="motion-toggle"
+          aria-pressed="true"
+          aria-label="Efeitos visuais"
+        >
+          FX ON
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container" id="main" tabindex="-1">
+    <!-- ECRÃ: INÍCIO -->
+    <section data-screen="inicio" aria-labelledby="home-title">
+      <div class="hero">
+        <div class="badge">
+          <span class="dot" aria-hidden="true"></span>
+          HISTÓRIAS REAIS. MODO ARCADE.
+        </div>
+
+        <h1 id="home-title" tabindex="-1">
+          TRÊS JOGADORES.
+          <span>UMA SÓ EQUIPA.</span>
+        </h1>
+
+        <p>
+          Conhece o Filipe, o Gabriel e a Thalia.<br>
+          Depois, põe a memória à prova: quem é quem?
+        </p>
+      </div>
+
+      <div class="roster">
+        <div class="section-head">
+          <h2>
+            <span class="section-number">01</span>
+            CONHECE OS PERSONAGENS
+          </h2>
+
+          <p>CLICA PARA ABRIR A FICHA ↗</p>
+        </div>
+
+        <div class="roster-grid" id="home-roster"></div>
+
+        <div class="launch">
+          <div>
+            <div class="launch-title">PRONTO PARA O DESAFIO?</div>
+            <p>
+              12 pistas. Três respostas possíveis.
+              Uma equipa para descobrir.
+            </p>
+          </div>
+
+          <div class="launch-side">
+            <div class="best">
+              RECORDE LOCAL
+              <strong data-best>0000</strong>
+            </div>
+
+            <button class="btn" data-action="start">
+              <span class="pixel-arrow" aria-hidden="true">▶</span>
+              COMEÇAR DESAFIO
+            </button>
+          </div>
+        </div>
+
+        <div class="mini-strip">
+          <span>SEM CRONÓMETRO</span>
+          <span>COMBOS &amp; PONTOS</span>
+          <span>ZERO MOEDAS NECESSÁRIAS</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ECRÃ: JOGO -->
+    <section
+      data-screen="jogar"
+      aria-label="Jogo Quem é quem?"
+      hidden
+    >
+      <div class="game-shell" id="game-root"></div>
+    </section>
+
+    <!-- ECRÃ: EQUIPA -->
+    <section
+      data-screen="equipa"
+      aria-labelledby="team-title"
+      hidden
+    >
+      <div class="page-heading">
+        <div class="eyebrow" style="color:var(--purple)">
+          PLAYER DATABASE / 03 PERFIS
+        </div>
+
+        <h1 id="team-title" tabindex="-1">
+          O NOSSO MELHOR COMBO.
+        </h1>
+
+        <p>
+          Três percursos, muitas curiosidades e a vontade de aprender.
+          Abre cada ficha para descobrir a pessoa por trás do avatar.
+        </p>
+      </div>
+
+      <div class="roster-grid" id="team-roster"></div>
+
+      <p class="team-note">
+        As alcunhas são parte do jogo.
+        As histórias e os interesses são reais.
+      </p>
+
+      <div class="actions bottom-space">
+        <button class="btn" data-action="start">
+          ▶ TESTAR A MINHA MEMÓRIA
+        </button>
+
+        <a class="text-button" href="#manual">
+          Ler as regras
+        </a>
+      </div>
+    </section>
+
+    <!-- ECRÃ: MANUAL -->
+    <section
+      data-screen="manual"
+      aria-labelledby="manual-title"
+      hidden
+    >
+      <div class="page-heading">
+        <div class="eyebrow" style="color:var(--purple)">
+          TUTORIAL / SEM COMPLICAÇÕES
+        </div>
+
+        <h1 id="manual-title" tabindex="-1">
+          COMO PASSAR DE NÍVEL.
+        </h1>
+
+        <p>
+          Não precisas de reflexos de ninja.
+          Só de curiosidade e um bocadinho de memória.
+        </p>
+      </div>
+
+      <div class="manual-grid">
+        <article class="manual-card">
+          <span class="step">01 /</span>
+          <h2>Explora a equipa</h2>
+          <p>
+            Abre os cartões. Nas abas de cada ficha encontras
+            a história, os interesses e uma curiosidade de cada pessoa.
+          </p>
+        </article>
+
+        <article class="manual-card">
+          <span class="step">02 /</span>
+          <h2>Liga as pistas</h2>
+          <p>
+            Responde às 12 perguntas escolhendo Filipe, Gabriel
+            ou Thalia. Mesmo quando falhas, descobres algo novo.
+          </p>
+        </article>
+
+        <article class="manual-card">
+          <span class="step">03 /</span>
+          <h2>Constrói o combo</h2>
+          <p>
+            Acerta várias perguntas seguidas para ganhar um bónus.
+            No fim, recebe o teu título e tenta superar o recorde.
+          </p>
+        </article>
+      </div>
+
+      <div class="rules">
+        <h2>REGRAS DA MÁQUINA</h2>
+
+        <ul>
+          <li>
+            Uma resposta certa vale <strong>100 pontos</strong>.
+          </li>
+
+          <li>
+            Cada acerto consecutivo acrescenta
+            <strong>10 pontos de bónus</strong>, até 50.
+            Máximo: 150 pontos por pergunta.
+          </li>
+
+          <li>
+            Uma resposta errada interrompe a sequência, mas
+            <strong>não retira os pontos que já ganhaste</strong>.
+          </li>
+
+          <li>
+            São <strong>quatro perguntas sobre cada pessoa</strong>,
+            baralhadas a cada partida.
+            A resposta é o perfil que menciona essa pista.
+          </li>
+
+          <li>
+            Não há limite de tempo. Podes visitar as outras abas
+            e voltar à partida; recarregar a página reinicia a partida.
+          </li>
+
+          <li>
+            O recorde fica <strong>neste navegador</strong>,
+            quando o armazenamento está disponível.
+            Não há classificação online.
+          </li>
+
+          <li>
+            No computador, usa <kbd>1</kbd>, <kbd>2</kbd> e <kbd>3</kbd>
+            para responder, ou <kbd>Tab</kbd> e <kbd>Enter</kbd>
+            para navegar. <kbd>Esc</kbd> fecha as fichas.
+          </li>
+
+          <li>
+            Ativa os sons com <strong>SOM</strong> e ajusta os efeitos
+            com <strong>FX</strong>, no topo.
+          </li>
+        </ul>
+      </div>
+
+      <div class="actions manual-actions">
+        <button class="btn" data-action="start">
+          ▶ ENTENDIDO. VAMOS JOGAR!
+        </button>
+      </div>
+    </section>
+
+    <noscript>
+      <p class="rules">
+        Ativa o JavaScript no navegador para abrir os perfis
+        e jogar o Trio Arcade.
+      </p>
+    </noscript>
+  </main>
+
+  <!-- RODAPÉ -->
+  <footer class="footer">
+    <div class="container footer-inner">
+      <span class="credit">FILIPE × GABRIEL × THALIA</span>
+      <span>TRÊS HISTÓRIAS. UM PROJETO EM EQUIPA.</span>
+      <span>TRIO ARCADE / V.1.0</span>
+    </div>
+  </footer>
+
+  <!-- FICHA MODAL DOS PERSONAGENS -->
+  <dialog id="profile-dialog" aria-labelledby="profile-name">
+    <div id="profile-content"></div>
+  </dialog>
+
+  <!-- NOTIFICAÇÕES E PARTÍCULAS -->
+  <div id="toast" class="toast" role="status" hidden></div>
+  <div id="pixel-burst" class="pixel-burst" aria-hidden="true"></div>
+
+  <script>
+    'use strict';
+
+    /* ============================================================
+       1. CONTEÚDO
+       Edita os perfis e as perguntas nesta secção.
+
+       Avatares:
+       avatars/filipe.png
+       avatars/gabriel.png
+       avatars/thalia.png
+       ============================================================ */
+
+    const PEOPLE = [
+      {
+        id: 'filipe',
+        name: 'Filipe',
+        title: 'O Criador',
+        color: '#b79aff',
+        tint: '#b79aff20',
+        tags: ['Escrita', 'Tecnologia'],
+
+        bio:
+          'Filipe junta a formação em sistemas de informação, redes e ' +
+          'cibersegurança a uma forte vontade de criar. A escrita é ' +
+          'uma das formas de dar vida à sua imaginação.',
+
+        extra:
+          'Entre treinos no ginásio, Fórmula 1 e mundos imersivos, ' +
+          'gosta de disciplina, estratégia e histórias com profundidade.',
+
+        interests: [
+          'Criação literária e construção de personagens',
+          'Sistemas de informação, redes e cibersegurança',
+          'Ginásio e Fórmula 1',
+          'GTA V, Red Dead Redemption 2 e American Truck Simulator'
+        ],
+
+        curiosity:
+          'Nos seus textos, explora dilemas morais, mundos alternativos ' +
+          'e reviravoltas emocionais. Tecnologia e criatividade fazem ' +
+          'parte da mesma história.'
+      },
+
+      {
+        id: 'gabriel',
+        name: 'Gabriel',
+        title: 'O Estratega',
+        color: '#dcff7b',
+        tint: '#dcff7b19',
+        tags: ['Música', 'Estratégia'],
+
+        bio:
+          'Gabriel estuda Tecnologias e Programação de Sistemas de ' +
+          'Informação. Gosta de descobrir como as coisas funcionam ' +
+          'e de transformar ideias em projetos.',
+
+        extra:
+          'Tem contacto com C#, Python, SQL, React, Git e GitHub. ' +
+          'Quer continuar a evoluir na programação e construir ' +
+          'uma carreira em tecnologia.',
+
+        interests: [
+          'Música: de Paramore e Linkin Park a Ne-Yo',
+          'Anime: Naruto, Demon Slayer, Solo Leveling e Jujutsu Kaisen',
+          'Estratégia, equipamentos e builds no AION 2',
+          'Jogos de tabuleiro, como Party & Co e Cluedo',
+          'Praias com água quente e cristalina'
+        ],
+
+        curiosity:
+          'Partilha os seus dias com o Zion, o seu Golden Retriever. ' +
+          'No universo do anime, o Gojo está entre as suas ' +
+          'personagens preferidas.'
+      },
+
+      {
+        id: 'thalia',
+        name: 'Thalia',
+        title: 'A Exploradora',
+        color: '#ff91bf',
+        tint: '#ff91bf1d',
+        tags: ['Estrada', 'Animais'],
+
+        bio:
+          'Thalia descreve-se como uma mistura de bom humor, carinho ' +
+          'e curiosidade. Gosta de aprender, divertir-se e aproveitar ' +
+          'o aconchego de casa.',
+
+        extra:
+          'Tem formação como auxiliar veterinária e já trabalhou ' +
+          'nessa área no Brasil. A curiosidade por computadores ' +
+          'tornou-se um sonho: trabalhar como programadora.',
+
+        interests: [
+          'Conduzir: o seu maior hobby',
+          'Computadores e aprendizagem de programação',
+          'Animais e cuidados veterinários',
+          'Ver filmes e estar perto dos filhos'
+        ],
+
+        curiosity:
+          'Entre a estrada, os filmes, a família e novos objetivos, ' +
+          'Thalia gosta de descobrir novas maneiras de seguir em frente.'
+      }
+    ];
+
+    const QUESTIONS = [
+      {
+        id: 'f1',
+        text: 'Quem destaca a Fórmula 1 entre os seus interesses?',
+        person: 'filipe',
+        explanation:
+          'Filipe aprecia a engenharia, a tática e a precisão da Fórmula 1.'
+      },
+      {
+        id: 'f2',
+        text: 'Quem cria narrativas com dilemas morais e mundos alternativos?',
+        person: 'filipe',
+        explanation:
+          'Filipe desenvolve enredos e personagens, explorando ' +
+          'reviravoltas emocionais na sua criação literária.'
+      },
+      {
+        id: 'f3',
+        text:
+          'Quem menciona GTA V, Red Dead Redemption 2 ' +
+          'e American Truck Simulator?',
+        person: 'filipe',
+        explanation:
+          'Estes três jogos e simuladores fazem parte dos interesses de Filipe.'
+      },
+      {
+        id: 'f4',
+        text: 'Quem encara o ginásio como uma extensão da disciplina mental?',
+        person: 'filipe',
+        explanation:
+          'O perfil de Filipe destaca a consistência nos treinos ' +
+          'e o foco no desenvolvimento físico.'
+      },
+      {
+        id: 'g1',
+        text: 'Quem tem um Golden Retriever chamado Zion?',
+        person: 'gabriel',
+        explanation:
+          'Gabriel partilha os seus dias com o Zion, o seu Golden Retriever.'
+      },
+      {
+        id: 'g2',
+        text: 'Quem tem o Gojo entre as suas personagens de anime preferidas?',
+        person: 'gabriel',
+        explanation:
+          'Gabriel gosta de Jujutsu Kaisen e destaca o Gojo ' +
+          'entre as suas personagens preferidas.'
+      },
+      {
+        id: 'g3',
+        text: 'Quem gosta de estudar builds e melhorar equipamentos no AION 2?',
+        person: 'gabriel',
+        explanation:
+          'Gabriel gosta de explorar estratégias para otimizar ' +
+          'a sua personagem no AION 2.'
+      },
+      {
+        id: 'g4',
+        text: 'Quem inclui Paramore, Linkin Park e Ne-Yo nos seus gostos musicais?',
+        person: 'gabriel',
+        explanation:
+          'Gabriel ouve estilos variados, do rock ao R&B e ao pop.'
+      },
+      {
+        id: 't1',
+        text: 'Quem diz que o seu maior hobby é conduzir?',
+        person: 'thalia',
+        explanation:
+          'Thalia destaca conduzir como o seu maior hobby: ' +
+          'a estrada faz parte dos seus interesses.'
+      },
+      {
+        id: 't2',
+        text:
+          'Quem tem formação como auxiliar veterinária ' +
+          'e já trabalhou na área no Brasil?',
+        person: 'thalia',
+        explanation:
+          'Thalia tem formação e experiência como auxiliar veterinária, ' +
+          'além de um carinho especial pelos animais.'
+      },
+      {
+        id: 't3',
+        text:
+          'Quem se descreve como bem-humorada e gosta de filmes ' +
+          'e do aconchego de casa?',
+        person: 'thalia',
+        explanation:
+          'Thalia apresenta-se com bom humor e curiosidade ' +
+          'e gosta de filmes e de estar em casa.'
+      },
+      {
+        id: 't4',
+        text:
+          'Quem conta que está a estudar para realizar o sonho ' +
+          'de se tornar programadora?',
+        person: 'thalia',
+        explanation:
+          'Thalia transformou a curiosidade por computadores ' +
+          'no objetivo de trabalhar com programação.'
+      }
+    ];
+
+    /* ============================================================
+       2. CONFIGURAÇÃO, UTILITÁRIOS E ESTADO
+       ============================================================ */
+
+    const CONFIG = Object.freeze({
+      basePoints: 100,
+      comboStep: 10,
+      maxBonus: 50,
+      storageKey: 'trio-arcade-v1',
+      routes: ['inicio', 'jogar', 'equipa', 'manual']
+    });
+
+    const $ = (selector, root = document) =>
+      root.querySelector(selector);
+
+    const $$ = (selector, root = document) =>
+      [...root.querySelectorAll(selector)];
+
+    // Escapa texto antes de o inserir em HTML.
+    const escapeHTML = value =>
+      String(value).replace(/[&<>"']/g, char => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;'
+      }[char]));
+
+    const pad = value => String(value).padStart(4, '0');
+
+    const byId = id =>
+      PEOPLE.find(person => person.id === id);
+
+    const motionPreference =
+      window.matchMedia('(prefers-reduced-motion: reduce)');
+
+    let game = null;
+    let audioContext = null;
+    let toastTimer;
+    let storageAvailable = true;
+
+    let preferences = {
+      best: 0,
+      sound: false,
+      effects: !motionPreference.matches
+    };
+
+    // Recupera apenas dados válidos do armazenamento local.
+    try {
+      const saved = JSON.parse(
+        localStorage.getItem(CONFIG.storageKey) || 'null'
+      );
+
+      if (saved && typeof saved === 'object') {
+        const maximumScore = QUESTIONS.reduce(
+          (total, _, index) => total + pointsForStreak(index + 1),
+          0
+        );
+
+        if (
+          Number.isInteger(saved.best) &&
+          saved.best >= 0 &&
+          saved.best <= maximumScore
+        ) {
+          preferences.best = saved.best;
+        }
+
+        if (typeof saved.effects === 'boolean') {
+          preferences.effects = saved.effects;
+        }
+      }
+    } catch {
+      storageAvailable = false;
+    }
+
+    // O som começa sempre desligado.
+    function savePreferences() {
+      try {
+        localStorage.setItem(
+          CONFIG.storageKey,
+          JSON.stringify({
+            best: preferences.best,
+            effects: preferences.effects
+          })
+        );
+      } catch {
+        storageAvailable = false;
+      }
+    }
+
+    // Baralhamento Fisher–Yates: mantém todas as perguntas, sem repetições.
+    function shuffle(items) {
+      const copy = [...items];
+
+      for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+
+      return copy;
+    }
+
+    function pointsForStreak(streak) {
+      return CONFIG.basePoints + Math.min(
+        Math.max(0, streak - 1) * CONFIG.comboStep,
+        CONFIG.maxBonus
+      );
+    }
+
+    function notify(message) {
+      clearTimeout(toastTimer);
+
+      $('#toast').textContent = message;
+      $('#toast').hidden = false;
+
+      toastTimer = setTimeout(() => {
+        $('#toast').hidden = true;
+      }, 3300);
+    }
+
+    function focusElement(selector) {
+      const element = $(selector);
+
+      if (element) {
+        element.focus({ preventScroll: true });
+      }
+    }
+
+    function accent(person) {
+      return `--accent:${person.color};--tint:${person.tint}`;
+    }
+
+    function avatar(person) {
+      return `
+        <img
+          src="avatars/${person.id}.png"
+          alt=""
+          width="1254"
+          height="1254"
+        >
+        <span class="fallback" hidden>
+          ${person.name.slice(0, 1)}
+          <small>
+            Coloca ${person.id}.png na pasta avatars.
+          </small>
+        </span>
+      `;
+    }
+
+    /* ============================================================
+       3. SONS E EFEITOS VISUAIS
+       O áudio é criado pelo navegador, sem ficheiros externos.
+       ============================================================ */
+
+    function playSound(kind) {
+      if (!preferences.sound) return;
+
+      try {
+        const Audio =
+          window.AudioContext || window.webkitAudioContext;
+
+        if (!Audio) {
+          throw new Error('Áudio indisponível');
+        }
+
+        audioContext ||= new Audio();
+        audioContext.resume().catch(() => {});
+
+        const notes =
+          kind === 'correct'
+            ? [523.25, 659.25, 783.99]
+            : kind === 'wrong'
+              ? [220, 164.81]
+              : kind === 'win'
+                ? [523.25, 659.25, 783.99, 1046.5]
+                : [440, 659.25];
+
+        notes.forEach((frequency, index) => {
+          const oscillator = audioContext.createOscillator();
+          const gain = audioContext.createGain();
+          const start = audioContext.currentTime + index * .09;
+
+          oscillator.type = 'square';
+          oscillator.frequency.value = frequency;
+
+          gain.gain.setValueAtTime(0, start);
+          gain.gain.linearRampToValueAtTime(.035, start + .01);
+          gain.gain.exponentialRampToValueAtTime(.001, start + .12);
+
+          oscillator.connect(gain);
+          gain.connect(audioContext.destination);
+
+          oscillator.start(start);
+          oscillator.stop(start + .13);
+
+          oscillator.onended = () => {
+            oscillator.disconnect();
+            gain.disconnect();
+          };
+        });
+      } catch {
+        preferences.sound = false;
+        updateSettings();
+        notify('O áudio não está disponível neste navegador.');
+      }
+    }
+
+    function burst() {
+      if (!preferences.effects || motionPreference.matches) return;
+
+      const root = $('#pixel-burst');
+      root.replaceChildren();
+
+      const colors = [
+        ...PEOPLE.map(person => person.color),
+        '#82e7ed'
+      ];
+
+      for (let i = 0; i < 20; i++) {
+        const pixel = document.createElement('i');
+
+        pixel.style.cssText = `
+          --x:${Math.round((Math.random() - .5) * 600)}px;
+          --y:${Math.round((Math.random() - .65) * 500)}px;
+          --r:${Math.round(Math.random() * 360)}deg;
+          background:${colors[i % colors.length]};
+        `;
+
+        root.append(pixel);
+      }
+
+      setTimeout(() => root.replaceChildren(), 850);
+    }
+
+    function updateSettings() {
+      const effects =
+        preferences.effects && !motionPreference.matches;
+
+      $('#sound-toggle').textContent =
+        preferences.sound ? '♪ SOM ON' : '♪ SOM OFF';
+
+      $('#sound-toggle').setAttribute(
+        'aria-pressed',
+        String(preferences.sound)
+      );
+
+      $('#motion-toggle').textContent =
+        effects ? 'FX ON' : 'FX OFF';
+
+      $('#motion-toggle').setAttribute(
+        'aria-pressed',
+        String(effects)
+      );
+
+      document.body.classList.toggle('reduce-motion', !effects);
+    }
+
+    /* ============================================================
+       4. CARTÕES E FICHAS DOS PERSONAGENS
+       ============================================================ */
+
+    function characterCard(person, index) {
+      return `
+        <button
+          class="character"
+          data-profile="${person.id}"
+          style="${accent(person)}"
+          aria-label="Conhecer ${person.name}: ${person.title}"
+        >
+          <div class="card-top">
+            <span>
+              P${index + 1} / ${String(index + 1).padStart(2, '0')}
+            </span>
+            <span>FICHA DISPONÍVEL</span>
+          </div>
+
+          <div class="portrait-stage">
+            ${avatar(person)}
+          </div>
+
+          <div class="card-info">
+            <div class="card-name">
+              <span>${person.name.toUpperCase()}</span>
+              <span aria-hidden="true">↗</span>
+            </div>
+
+            <div class="card-class">
+              ${person.title}
+            </div>
+
+            <div class="tag-list">
+              ${person.tags.map(tag => `
+                <span class="pill">${escapeHTML(tag)}</span>
+              `).join('')}
+            </div>
+          </div>
+        </button>
+      `;
+    }
+
+    function openProfile(id) {
+      const person = byId(id);
+      if (!person) return;
+
+      $('#profile-content').innerHTML = `
+        <article class="profile" style="${accent(person)}">
+          <button
+            class="close-dialog"
+            data-action="close-profile"
+            aria-label="Fechar ficha"
+          >
+            ×
+          </button>
+
+          <div class="profile-art">
+            ${avatar(person)}
+          </div>
+
+          <div class="profile-copy">
+            <h2 id="profile-name">
+              ${person.name.toUpperCase()}
+            </h2>
+
+            <p class="card-class">
+              ALCUNHA ARCADE / ${person.title}
+            </p>
+
+            <div
+              class="profile-tabs"
+              role="tablist"
+              aria-label="Sobre ${person.name}"
+            >
+              <button
+                id="tab-story"
+                role="tab"
+                aria-selected="true"
+                aria-controls="panel-story"
+                tabindex="0"
+                data-tab="story"
+              >
+                HISTÓRIA
+              </button>
+
+              <button
+                id="tab-interests"
+                role="tab"
+                aria-selected="false"
+                aria-controls="panel-interests"
+                tabindex="-1"
+                data-tab="interests"
+              >
+                INTERESSES
+              </button>
+
+              <button
+                id="tab-fact"
+                role="tab"
+                aria-selected="false"
+                aria-controls="panel-fact"
+                tabindex="-1"
+                data-tab="fact"
+              >
+                EXTRA
+              </button>
+            </div>
+
+            <div
+              id="panel-story"
+              role="tabpanel"
+              aria-labelledby="tab-story"
+              tabindex="0"
+            >
+              <p>${escapeHTML(person.bio)}</p>
+              <p>${escapeHTML(person.extra)}</p>
+            </div>
+
+            <div
+              id="panel-interests"
+              role="tabpanel"
+              aria-labelledby="tab-interests"
+              tabindex="0"
+              hidden
+            >
+              <ul>
+                ${person.interests.map(item => `
+                  <li>${escapeHTML(item)}</li>
+                `).join('')}
+              </ul>
+            </div>
+
+            <div
+              id="panel-fact"
+              role="tabpanel"
+              aria-labelledby="tab-fact"
+              tabindex="0"
+              hidden
+            >
+              <p>${escapeHTML(person.curiosity)}</p>
+            </div>
+          </div>
+        </article>
+      `;
+
+      $('#profile-dialog').showModal();
+      playSound('select');
+    }
+
+    function selectProfileTab(name) {
+      $$('.profile-tabs [role="tab"]').forEach(tab => {
+        const selected = tab.dataset.tab === name;
+
+        tab.setAttribute('aria-selected', String(selected));
+        tab.tabIndex = selected ? 0 : -1;
+      });
+
+      $$('#profile-content [role="tabpanel"]').forEach(panel => {
+        panel.hidden = panel.id !== `panel-${name}`;
+      });
+    }
+
+    /* ============================================================
+       5. NAVEGAÇÃO
+       A partida mantém-se ao visitar outras secções.
+       ============================================================ */
+
+    function currentRoute() {
+      const route = location.hash.slice(1);
+
+      return CONFIG.routes.includes(route) ? route : 'inicio';
+    }
+
+    function showScreen(moveFocus = true) {
+      const route = currentRoute();
+
+      $$('[data-screen]').forEach(screen => {
+        screen.hidden = screen.dataset.screen !== route;
+      });
+
+      $$('[data-route]').forEach(link => {
+        if (link.dataset.route === route) {
+          link.setAttribute('aria-current', 'page');
+        } else {
+          link.removeAttribute('aria-current');
+        }
+      });
+
+      if (route === 'jogar') {
+        renderGame();
+      }
+
+      if (moveFocus) {
+        focusElement(`[data-screen="${route}"] h1`);
+        window.scrollTo({ top: 0, behavior: 'instant' });
+      }
+    }
+
+    function goTo(route) {
+      if (location.hash === `#${route}`) {
+        showScreen();
+      } else {
+        location.hash = route;
+      }
+    }
+
+    function updateBest() {
+      $$('[data-best]').forEach(element => {
+        element.textContent = pad(preferences.best);
+      });
+    }
+
+    /* ============================================================
+       6. MOTOR DO QUIZ
+       Uma resposta por pergunta e pontuação controlada.
+       ============================================================ */
+
+    function startGame() {
+      // Evita apagar uma partida que ainda está em curso.
+      if (game && !game.completed) {
+        goTo('jogar');
+        notify('Partida retomada. O teu combo continua aqui!');
+        return;
+      }
+
+      game = {
+        deck: shuffle(QUESTIONS),
+        index: 0,
+        score: 0,
+        streak: 0,
+        maxStreak: 0,
+        answered: false,
+        completed: false,
+        answers: [],
+        previousBest: preferences.best,
+        newBest: false
+      };
+
+      goTo('jogar');
+      playSound('select');
+    }
+
+    function answerQuestion(personId) {
+      if (
+        !game ||
+        game.completed ||
+        game.answered ||
+        !byId(personId) ||
+        currentRoute() !== 'jogar'
+      ) {
+        return;
+      }
+
+      const question = game.deck[game.index];
+      const correct = personId === question.person;
+
+      // Bloqueia imediatamente uma segunda resposta.
+      game.answered = true;
+
+      game.streak = correct ? game.streak + 1 : 0;
+      game.maxStreak = Math.max(game.maxStreak, game.streak);
+
+      const earned = correct
+        ? pointsForStreak(game.streak)
+        : 0;
+
+      game.score += earned;
+
+      game.answers.push({
+        question,
+        selected: personId,
+        correct,
+        earned
+      });
+
+      renderGame();
+      focusElement('#answer-feedback');
+      playSound(correct ? 'correct' : 'wrong');
+
+      if (correct) {
+        burst();
+      }
+    }
+
+    function nextQuestion() {
+      if (!game || !game.answered || game.completed) return;
+
+      if (game.index === game.deck.length - 1) {
+        game.completed = true;
+        game.newBest = game.score > preferences.best;
+
+        if (game.newBest) {
+          preferences.best = game.score;
+          savePreferences();
+          updateBest();
+        }
+
+        renderGame();
+        focusElement('#result-heading');
+        playSound('win');
+        burst();
+      } else {
+        game.index++;
+        game.answered = false;
+
+        renderGame();
+        focusElement('#question-title');
+      }
+    }
+
+    function renderGame() {
+      const root = $('#game-root');
+
+      // Ecrã de preparação, antes da primeira partida.
+      if (!game) {
+        root.innerHTML = `
+          <div class="lobby">
+            <div class="eyebrow muted">
+              MÁQUINA PRONTA / 1 JOGADOR
+            </div>
+
+            <div class="lobby-icon" aria-hidden="true">?</div>
+
+            <h1 tabindex="-1">QUEM É QUEM?</h1>
+
+            <p>
+              Descobre a pessoa por trás de cada pista.
+              São 12 perguntas, sem pressa e com bónus
+              por acertos seguidos.
+            </p>
+
+            <div class="badge">
+              RECORDE LOCAL: ${pad(preferences.best)} PTS
+            </div>
+
+            <div class="actions">
+              <button class="btn" data-action="start">
+                ▶ COMEÇAR DESAFIO
+              </button>
+
+              <a class="text-button" href="#equipa">
+                Conhecer a equipa primeiro
+              </a>
+            </div>
+          </div>
+        `;
+
+        return;
+      }
+
+      if (game.completed) {
+        renderResults();
+        return;
+      }
+
+      const question = game.deck[game.index];
+      const last = game.answers.at(-1);
+      const done = game.index + (game.answered ? 1 : 0);
+
+      root.innerHTML = `
+        <div class="game-top">
+          <div class="eyebrow">
+            MISSÃO 01<br>
+            QUEM É QUEM?
+          </div>
+
+          <div class="stats">
+            <div class="stat">
+              PONTOS
+              <strong>${pad(game.score)}</strong>
+            </div>
+
+            <div class="stat">
+              SEQUÊNCIA
+              <strong>${game.streak}×</strong>
+            </div>
+
+            <div class="stat">
+              RECORDE
+              <strong>${pad(preferences.best)}</strong>
+            </div>
+          </div>
+        </div>
+
+        <div class="progress-label">
+          <label for="quiz-progress">
+            PERGUNTA ${String(game.index + 1).padStart(2, '0')}
+            / ${game.deck.length}
+          </label>
+
+          <span>${done} RESPONDIDAS</span>
+        </div>
+
+        <progress
+          id="quiz-progress"
+          max="${game.deck.length}"
+          value="${done}"
+        >
+          ${done} de ${game.deck.length}
+        </progress>
+
+        <div class="question-panel">
+          <div class="eyebrow">
+            ENCONTRA A PESSOA CERTA
+          </div>
+
+          <h1 id="question-title" tabindex="-1">
+            ${escapeHTML(question.text)}
+          </h1>
+
+          <p>
+            Esta pista aparece no perfil de uma destas pessoas.
+          </p>
+        </div>
+
+        <div
+          class="answer-grid"
+          role="group"
+          aria-labelledby="question-title"
+        >
+          ${PEOPLE.map((person, index) => {
+            const state = game.answered
+              ? (
+                  person.id === question.person
+                    ? 'correct'
+                    : person.id === last.selected
+                      ? 'wrong'
+                      : 'faded'
+                )
+              : '';
+
+            const accessibleState =
+              state === 'correct'
+                ? ' — resposta certa'
+                : state === 'wrong'
+                  ? ' — escolheste esta resposta, incorreta'
+                  : '';
+
+            return `
+              <button
+                class="answer ${state}"
+                style="${accent(person)}"
+                data-answer="${person.id}"
+                ${game.answered ? 'disabled' : ''}
+                aria-label="Responder ${person.name}${accessibleState}"
+              >
+                <div class="answer-portrait">
+                  ${avatar(person)}
+                </div>
+
+                <div class="answer-label">
+                  <span>${person.name.toUpperCase()}</span>
+                  <kbd aria-hidden="true">${index + 1}</kbd>
+                </div>
+              </button>
+            `;
+          }).join('')}
+        </div>
+
+        ${game.answered ? `
+          <div
+            class="feedback ${last.correct ? '' : 'miss'}"
+            id="answer-feedback"
+            role="status"
+            tabindex="-1"
+          >
+            <h2>
+              ${last.correct
+                ? `
+                  CERTO! +${last.earned} PONTOS
+                  ${game.streak > 1
+                    ? `· SEQUÊNCIA DE ${game.streak}!`
+                    : ''}
+                `
+                : `
+                  ERA ${byId(question.person).name.toUpperCase()}!
+                  MAIS UMA HISTÓRIA DESCOBERTA.
+                `
+              }
+            </h2>
+
+            <p>${escapeHTML(question.explanation)}</p>
+          </div>
+
+          <div class="next-row">
+            <p>
+              ${last.correct
+                ? 'Boa memória. Vamos à próxima?'
+                : 'Os teus pontos mantêm-se. Continua o desafio!'
+              }
+            </p>
+
+            <button class="btn" data-action="next">
+              ${game.index === game.deck.length - 1
+                ? 'VER RESULTADO'
+                : 'PRÓXIMA PISTA'
+              }
+
+              <span aria-hidden="true">→</span>
+            </button>
+          </div>
+        ` : `
+          <div class="next-row">
+            <p>
+              Clica num personagem ou usa as teclas 1, 2 e 3.<br>
+              Sem tempo limite. Joga ao teu ritmo.
+            </p>
+
+            <a class="text-button" href="#equipa">
+              Consultar os perfis ↗
+            </a>
+          </div>
+        `}
+      `;
+    }
+
+    function renderResults() {
+      const correct = game.answers.filter(
+        answer => answer.correct
+      ).length;
+
+      const total = game.deck.length;
+
+      const title =
+        correct === total
+          ? 'Lenda da equipa'
+          : correct >= 9
+            ? 'Já podes entrar no grupo!'
+            : correct >= 6
+              ? 'Amigo da equipa'
+              : 'A aventura está a começar';
+
+      $('#game-root').innerHTML = `
+        <div class="results">
+          <div class="badge">
+            ★ MISSÃO CONCLUÍDA ★
+          </div>
+
+          <h1 id="result-heading" tabindex="-1">
+            ${correct === total ? 'PERFECT COMBO!' : 'BEM JOGADO!'}
+          </h1>
+
+          <p>
+            Cada pista revelou um pouco mais sobre a nossa equipa.
+          </p>
+
+          <div class="result-score">
+            ${pad(game.score)}
+            <small>PTS</small>
+          </div>
+
+          <div class="result-title">
+            TÍTULO DESBLOQUEADO / ${title.toUpperCase()}
+          </div>
+
+          <div class="result-stats">
+            <div>
+              <strong>${correct}/${total}</strong>
+              <span>ACERTOS</span>
+            </div>
+
+            <div>
+              <strong>${game.maxStreak}×</strong>
+              <span>MELHOR SEQUÊNCIA</span>
+            </div>
+
+            <div>
+              <strong>${Math.round(correct / total * 100)}%</strong>
+              <span>PRECISÃO</span>
+            </div>
+          </div>
+
+          <p>
+            ${game.newBest ? '★ Novo recorde! ' : ''}
+            ${storageAvailable
+              ? 'Recorde neste navegador'
+              : 'Recorde desta sessão'
+            }:
+            <strong>${preferences.best} pontos</strong>.
+          </p>
+
+          <div class="actions">
+            <button class="btn" data-action="start">
+              ↻ JOGAR NOVAMENTE
+            </button>
+
+            <a class="btn secondary" href="#equipa">
+              EXPLORAR A EQUIPA
+            </a>
+          </div>
+        </div>
+
+        <details class="result-review">
+          <summary>
+            VER AS ${total} RESPOSTAS DA PARTIDA
+          </summary>
+
+          <ol class="review-list">
+            ${game.answers.map(answer => `
+              <li>
+                <strong>
+                  <span class="review-mark ${answer.correct ? '' : 'miss'}">
+                    ${answer.correct ? '✓' : '×'}
+                  </span>
+
+                  ${escapeHTML(answer.question.text)}
+                </strong>
+
+                <p>
+                  ${escapeHTML(answer.question.explanation)}
+                </p>
+
+                <p>
+                  A tua escolha: ${byId(answer.selected).name}
+                  · +${answer.earned} pontos
+                </p>
+              </li>
+            `).join('')}
+          </ol>
+        </details>
+      `;
+    }
+
+    /* ============================================================
+       7. EVENTOS E ARRANQUE
+       ============================================================ */
+
+    // Delegação de eventos: funciona também nos botões gerados pelo JS.
+    document.addEventListener('click', event => {
+      const element = event.target.closest('button');
+
+      if (!element || element.disabled) return;
+
+      if (element.dataset.profile) {
+        openProfile(element.dataset.profile);
+      } else if (element.dataset.tab) {
+        selectProfileTab(element.dataset.tab);
+      } else if (element.dataset.answer) {
+        answerQuestion(element.dataset.answer);
+      } else if (element.dataset.action === 'start') {
+        startGame();
+      } else if (element.dataset.action === 'next') {
+        nextQuestion();
+      } else if (element.dataset.action === 'close-profile') {
+        $('#profile-dialog').close();
+      }
+    });
+
+    // Navegação por teclado.
+    document.addEventListener('keydown', event => {
+      if (
+        event.repeat ||
+        event.ctrlKey ||
+        event.altKey ||
+        event.metaKey
+      ) {
+        return;
+      }
+
+      if ($('#profile-dialog').open) {
+        const navigationKeys = [
+          'ArrowLeft',
+          'ArrowRight',
+          'Home',
+          'End'
+        ];
+
+        if (
+          event.target.matches('[role="tab"]') &&
+          navigationKeys.includes(event.key)
+        ) {
+          event.preventDefault();
+
+          const tabs = $$('.profile-tabs [role="tab"]');
+          const index = tabs.indexOf(event.target);
+
+          const next =
+            event.key === 'Home'
+              ? 0
+              : event.key === 'End'
+                ? tabs.length - 1
+                : (
+                    index +
+                    (event.key === 'ArrowRight' ? 1 : -1) +
+                    tabs.length
+                  ) % tabs.length;
+
+          selectProfileTab(tabs[next].dataset.tab);
+          tabs[next].focus();
+        }
+
+        return;
+      }
+
+      if (
+        event.target.matches(
+          'input, textarea, select, [contenteditable="true"]'
+        )
+      ) {
+        return;
+      }
+
+      if (
+        currentRoute() === 'jogar' &&
+        ['1', '2', '3'].includes(event.key)
+      ) {
+        event.preventDefault();
+        answerQuestion(PEOPLE[Number(event.key) - 1].id);
+      }
+    });
+
+    // Um avatar em falta não impede o jogo.
+    document.addEventListener('error', event => {
+      if (event.target.matches?.('img')) {
+        event.target.hidden = true;
+
+        const fallback = event.target.nextElementSibling;
+
+        if (fallback?.classList.contains('fallback')) {
+          fallback.hidden = false;
+        }
+      }
+    }, true);
+
+    // Fecha a ficha quando se clica no fundo exterior.
+    $('#profile-dialog').addEventListener('click', event => {
+      if (event.target === $('#profile-dialog')) {
+        $('#profile-dialog').close();
+      }
+    });
+
+    $('#sound-toggle').addEventListener('click', () => {
+      preferences.sound = !preferences.sound;
+      updateSettings();
+      playSound('select');
+    });
+
+    $('#motion-toggle').addEventListener('click', () => {
+      if (motionPreference.matches) {
+        notify(
+          'Os efeitos respeitam a redução de movimento do teu sistema.'
+        );
+        return;
+      }
+
+      preferences.effects = !preferences.effects;
+      savePreferences();
+      updateSettings();
+    });
+
+    motionPreference.addEventListener('change', updateSettings);
+
+    $('.skip').addEventListener('click', event => {
+      event.preventDefault();
+
+      $('#main').focus();
+      $('#main').scrollIntoView({ behavior: 'instant' });
+    });
+
+    window.addEventListener('hashchange', () => {
+      showScreen();
+    });
+
+    // Preenche os dois conjuntos de cartões com os mesmos dados.
+    ['#home-roster', '#team-roster'].forEach(selector => {
+      $(selector).innerHTML = PEOPLE.map(characterCard).join('');
+    });
+
+    updateSettings();
+    updateBest();
+    showScreen(false);
+  </script>
+</body>
+</html>
